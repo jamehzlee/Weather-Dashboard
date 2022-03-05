@@ -1,0 +1,9 @@
+.custom-box {
+    border: 1px;
+    border-style: solid;
+}
+
+.custom-card {
+    background-color: rgba(1, 1, 34, 0.87);
+    color: white;
+}

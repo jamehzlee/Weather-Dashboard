@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <link rel="stylesheet" href="./assets/css/style.css">
     <title>Weather Dashboard</title>
 </head>
 <body class="">
@@ -30,23 +31,57 @@
             </div>
         </section>
         
-        <section class="column">
-            <div class="column">
+        <section class="column mr-3">
+            <div id="current" class="column box mt-4 custom-box">
                 <div class="is-size-3 has-text-weight-bold">New York City</div>
-                <div>Temp: </div>
-                <div>Wind: </div>
-                <div>Humidity: </div>
-                <div>UV Index: </div>
+                <div class="column">Temp: </div>
+                <div class="column">Wind: </div>
+                <div class="column">Humidity: </div>
+                <div class="column">UV Index: 1.123</div>
             </div>
             
-            <div class="column">
-                <div class="box">hi</div>
-                <div class="box">hi</div>
-                <div class="box">hi</div>
-                <div class="box">hi</div>
-                <div class="box">hi</div>
+            <div class="column is-size-4 has-text-weight-bold">5-Day Forecast:</div>
+            <div id="five-day" class="columns mr-1">
+                <div id="" class="column card m-2 custom-card">
+                    <p class="column"></p>
+                    <p class="column"></p>
+                    <p class="column">Temp: </p>
+                    <p class="column">Wind: </p>
+                    <p class="column">Humidity: </p>
+                </div>
+                <div id="" class="column card m-2 custom-card">
+                    <p class="column"></p>
+                    <p class="column"></p>
+                    <p class="column">Temp: </p>
+                    <p class="column">Wind: </p>
+                    <p class="column">Humidity: </p>
+                </div>
+                <div id="" class="column card m-2 custom-card">
+                    <p class="column"></p>
+                    <p class="column"></p>
+                    <p class="column">Temp: </p>
+                    <p class="column">Wind: </p>
+                    <p class="column">Humidity: </p>
+                </div>
+                <div id="" class="column card m-2 custom-card">
+                    <p class="column"></p>
+                    <p class="column"></p>
+                    <p class="column">Temp: </p>
+                    <p class="column">Wind: </p>
+                    <p class="column">Humidity: </p>
+                </div>
+                <div id="" class="column card m-2 custom-card">
+                    <p class="column"></p>
+                    <p class="column"></p>
+                    <p class="column">Temp: </p>
+                    <p class="column">Wind: </p>
+                    <p class="column">Humidity: </p>
+                </div>
             </div>
         </section>
     </div>
-    </body>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <script src="./assets/js/script.js"></script>
+</body>
 </html>
