@@ -111,12 +111,12 @@ function clickSearch() {
     searchCity()
     storeHistory()
     showHistory()
+    userInputEl.value = ""
 }
 
 //Event listener for the search button
 searchBtnEl.addEventListener("click", function() {
     clickSearch()
-    userInputEl.textContent = ""
 })
 
 //Event listener for the search history buttons
