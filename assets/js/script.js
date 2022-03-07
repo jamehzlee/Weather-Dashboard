@@ -6,10 +6,12 @@ let searchBtnEl = document.querySelector("#search-btn")
 let userInput = document.querySelector("#user-city")
 let currentDayEl = document.querySelector("#current")
 let fiveDayEl = document.querySelector("#five-day")
+let historyBtns = document.querySelector(".buttons")
 let fiveCardEl = fiveDayEl.children
 let time = new Date()
 let utcTime = 0
 let cityName = ""
+let capName = ""
 let uv = 0
 let temp = 0
 let wind = 0
@@ -19,17 +21,15 @@ let day = 0
 let year = 0
 let lat = 0
 let lon = 0
-let test = "los angeles"
+let historyArray = []
 
 function searchCity() {
-    let userCity = userInput.value
-    fetch("http://api.openweathermap.org/geo/1.0/direct?q="+userCity+"&limit=1&appid=947940214a5feca7c6125ce4a4937d43")
+    fetch("https://api.openweathermap.org/geo/1.0/direct?q="+userCity+"&limit=1&appid=947940214a5feca7c6125ce4a4937d43")
     .then(header => header.json())
     .then(response => {
-        console.log(response);
         lat = response[0].lat
         lon = response[0].lon
-        cityName = response.name
+        cityName = response[0].name
         getCurrentDay()
         getFiveDay()
     })
@@ -45,7 +45,6 @@ function getCurrentDay() {
         humid = response.current.humidity
         uv = response.current.uvi
         editCurrent()
-        console.log(response);
     })
 }
 
@@ -73,6 +72,7 @@ function editCurrent() {
     currentDayEl.children[4].innerText = "UV Index: " + uv
 }
 
+//need to fix date
 function editFive() {
     utcTime = time.toUTCString
     month = time.getMonth(utcTime) + 1
@@ -85,9 +85,37 @@ function editFive() {
     fiveCardEl.children[4].innerText = "Humidity: " + humid + " %"
  }
 
-searchBtnEl.addEventListener("click", function() {
+
+function storeHistory() {
+    historyArray.push(userInput.value)
+    localStorage.setItem("userHistory", JSON.stringify(historyArray))
+}
+
+function showHistory() {
+    let fromHistory = JSON.parse(localStorage.getItem("userHistory"))
+    let newHistoryArray = fromHistory.reverse()
+    let buttonEl = document.createElement("button")
+    let i = 0
+
+    buttonEl.setAttribute("id", "history")
+    buttonEl.setAttribute("class", "button is-fullwidth")
+    buttonEl.textContent = newHistoryArray[i]
+    historyBtns.append(buttonEl)
+    i++
+}
+
+function clickSearch() {
+    userCity = userInput.value
     searchCity()
+    storeHistory()
+    showHistory()
+}
+
+searchBtnEl.addEventListener("click", function() {
+    clickSearch()
 })
-// userInput.addEventListener("", function() {
-//  searchCity()    
-// })
+historyBtns.addEventListener("click", function(event) {
+    buttonClicked = event.target
+    userCity = buttonClicked.textContent
+    searchCity(userInput)
+})
