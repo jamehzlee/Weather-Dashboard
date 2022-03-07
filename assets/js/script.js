@@ -30,7 +30,7 @@ function searchCity() {
         lat = response[0].lat
         lon = response[0].lon
         cityName = response.name
-        // getCurrentDay()
+        getCurrentDay()
         getFiveDay()
     })
 }
