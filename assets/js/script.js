@@ -1,9 +1,5 @@
-// key 1  90a5b2cd046d7e3c1493dd6299106c4d
-// key 2  b0032ccf1f942a837562c29b20858d84
-// key 3  947940214a5feca7c6125ce4a4937d43
-
 let searchBtnEl = document.querySelector("#search-btn")
-let userInput = document.querySelector("#user-city")
+let userInputEl = document.querySelector("#user-city")
 let currentDayEl = document.querySelector("#current")
 let currentNameEl = document.querySelector("#current-name")
 let currentIconEl = document.querySelector("#current-icon")
@@ -11,20 +7,17 @@ let fiveDayEl = document.querySelector("#five-day")
 let historyBtns = document.querySelector(".buttons")
 let fiveCardEl = fiveDayEl.children
 let icon = ""
-let utcTime = 0
 let cityName = ""
-let capName = ""
+let utcTime = 0
 let uv = 0
 let temp = 0
 let wind = 0
 let humid = 0
-let month = 0
-let day = 0
-let year = 0
 let lat = 0
 let lon = 0
 let historyArray = []
 
+//Converts the city name to latitude and longitude values
 function searchCity() {
     fetch("https://api.openweathermap.org/geo/1.0/direct?q="+userCity+"&limit=1&appid=947940214a5feca7c6125ce4a4937d43")
     .then(header => header.json())
@@ -36,7 +29,7 @@ function searchCity() {
         getFiveDay()
     })
 }
-
+ //Gets the current weather data of the searched city
 function getCurrentDay() {
     fetch("https://api.openweathermap.org/data/2.5/onecall?lat="+lat+"&lon="+lon+"&units=imperial&exclude=minutely,hourly,daily,alerts&appid=947940214a5feca7c6125ce4a4937d43")
     .then(header => header.json())
@@ -51,6 +44,7 @@ function getCurrentDay() {
     })
 }
 
+//Gets the 5 day forecast data of the searched city
 function getFiveDay() {
     fetch("https://api.openweathermap.org/data/2.5/onecall?lat="+lat+"&lon="+lon+"&units=imperial&exclude=current,minutely,hourly,alerts&appid=947940214a5feca7c6125ce4a4937d43")
     .then(header => header.json())
@@ -67,23 +61,25 @@ function getFiveDay() {
     })
 }
 
+//Displays the current weather data to the page
 function editCurrent() {
     let time = new Date(utcTime * 1000)
+
     currentNameEl.innerText = cityName + " (" + time.toLocaleDateString(utcTime) + ") "
     currentIconEl.src = "https://openweathermap.org/img/wn/"+icon+".png"
     currentDayEl.children[1].innerText = "Temp : " + temp + " °F"
     currentDayEl.children[2].innerText = "Wind: " + wind + " MPH"
     currentDayEl.children[3].innerText = "Humidity: " + humid + " %"
     currentDayEl.children[4].innerText = "UV Index: " + uv
-    // uvIndex()
 }
 
-//need to fix date
+//Displays the 5 day forecast data to the page
 function editFive() {
     let time = new Date(utcTime * 1000)
-    month = time.getMonth() + 1
-    day = time.getDate()
-    year = time.getFullYear()
+    let month = time.getMonth() + 1
+    let day = time.getDate()
+    let year = time.getFullYear()
+
     fiveCardEl.children[0].innerText = month + "/" + day + "/" + year 
     fiveCardEl.children[1].src = "https://openweathermap.org/img/wn/"+icon+".png"
     fiveCardEl.children[2].innerText = "Temp : " + temp + " °F"
@@ -91,40 +87,42 @@ function editFive() {
     fiveCardEl.children[4].innerText = "Humidity: " + humid + " %"
  }
 
-// function uvIndex() {
-//     currentDayEl.children[4].
-// }
-
+//Stores user search in their local storage
 function storeHistory() {
-    historyArray.push(userInput.value)
+    historyArray.push(userInputEl.value)
     localStorage.setItem("userHistory", JSON.stringify(historyArray))
 }
 
+//Displays searches in local storage as a button
 function showHistory() {
     let fromHistory = JSON.parse(localStorage.getItem("userHistory"))
     let newHistoryArray = fromHistory.reverse()
     let buttonEl = document.createElement("button")
-    let i = 0
 
     buttonEl.setAttribute("id", "history")
     buttonEl.setAttribute("class", "button is-fullwidth has-background-grey-light")
-    buttonEl.textContent = newHistoryArray[i]
+    buttonEl.textContent = newHistoryArray[0]
     historyBtns.append(buttonEl)
-    i++
 }
 
+//Searches, stores, and displays user's search when they click the search button
 function clickSearch() {
-    userCity = userInput.value
+    userCity = userInputEl.value
     searchCity()
     storeHistory()
     showHistory()
 }
 
+//Event listener for the search button
 searchBtnEl.addEventListener("click", function() {
     clickSearch()
+    userInputEl.textContent = ""
 })
+
+//Event listener for the search history buttons
+//When a search history button is clicked the search data is redisplayed
 historyBtns.addEventListener("click", function(event) {
     buttonClicked = event.target
     userCity = buttonClicked.textContent
-    searchCity(userInput)
+    searchCity(userInputEl)
 })
