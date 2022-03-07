@@ -5,10 +5,12 @@
 let searchBtnEl = document.querySelector("#search-btn")
 let userInput = document.querySelector("#user-city")
 let currentDayEl = document.querySelector("#current")
+let currentNameEl = document.querySelector("#current-name")
+let currentIconEl = document.querySelector("#current-icon")
 let fiveDayEl = document.querySelector("#five-day")
 let historyBtns = document.querySelector(".buttons")
 let fiveCardEl = fiveDayEl.children
-let time = new Date()
+let icon = ""
 let utcTime = 0
 let cityName = ""
 let capName = ""
@@ -40,6 +42,7 @@ function getCurrentDay() {
     .then(header => header.json())
     .then(response => {
         utcTime = response.current.dt
+        icon = response.current.weather[0].icon
         temp = response.current.temp
         wind = response.current.wind_speed
         humid = response.current.humidity
@@ -54,37 +57,43 @@ function getFiveDay() {
     .then(response => {
         for (let i = 0; i < fiveDayEl.children.length; i++) {
             utcTime = response.daily[i].dt
+            icon = response.daily[i].weather[0].icon
             temp = response.daily[i].temp.day
             wind = response.daily[i].wind_speed
             humid = response.daily[i].humidity
             fiveCardEl = fiveDayEl.children[i]
             editFive()
         }
-        console.log(response)
     })
 }
 
 function editCurrent() {
-    currentDayEl.children[0].innerText = cityName + " (" + time.toLocaleDateString(utcTime) + ") " + "icon"
+    let time = new Date(utcTime * 1000)
+    currentNameEl.innerText = cityName + " (" + time.toLocaleDateString(utcTime) + ") "
+    currentIconEl.src = "https://openweathermap.org/img/wn/"+icon+".png"
     currentDayEl.children[1].innerText = "Temp : " + temp + " °F"
     currentDayEl.children[2].innerText = "Wind: " + wind + " MPH"
     currentDayEl.children[3].innerText = "Humidity: " + humid + " %"
     currentDayEl.children[4].innerText = "UV Index: " + uv
+    // uvIndex()
 }
 
 //need to fix date
 function editFive() {
-    utcTime = time.toUTCString
-    month = time.getMonth(utcTime) + 1
-    day = time.getDate(utcTime)
-    year = time.getFullYear(utcTime)
+    let time = new Date(utcTime * 1000)
+    month = time.getMonth() + 1
+    day = time.getDate()
+    year = time.getFullYear()
     fiveCardEl.children[0].innerText = month + "/" + day + "/" + year 
-    fiveCardEl.children[1].innerText = "icon"
+    fiveCardEl.children[1].src = "https://openweathermap.org/img/wn/"+icon+".png"
     fiveCardEl.children[2].innerText = "Temp : " + temp + " °F"
     fiveCardEl.children[3].innerText = "Wind: " + wind + " MPH"
     fiveCardEl.children[4].innerText = "Humidity: " + humid + " %"
  }
 
+// function uvIndex() {
+//     currentDayEl.children[4].
+// }
 
 function storeHistory() {
     historyArray.push(userInput.value)
@@ -98,7 +107,7 @@ function showHistory() {
     let i = 0
 
     buttonEl.setAttribute("id", "history")
-    buttonEl.setAttribute("class", "button is-fullwidth")
+    buttonEl.setAttribute("class", "button is-fullwidth has-background-grey-light")
     buttonEl.textContent = newHistoryArray[i]
     historyBtns.append(buttonEl)
     i++
